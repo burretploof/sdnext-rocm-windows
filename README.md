@@ -38,23 +38,23 @@ This is assuming you have fulfilled the requirements already; meaning you have a
       - `venv\Scripts\activate.bat` (for cmd)
       - `.\venv\Scripts\Activate.ps1` (for Powershell, might require script execution privileges)
       - If the shell says (venv) next to your cursor, then it worked correctly
-  5. Run the following to install the ROCm libraries as well as torch and torchvision in the venv (this might take a while as the download is large and the ROCm libs will be compiled on your system)
-      - `python -m pip install --no-deps --index-url https://d2awnip2yjpvqn.cloudfront.net/v2/gfx120X-all/ rocm[libraries,devel] torch torchvision`
-      - With `--no-deps` pip will not try to look for compatible versions and install the latest packages instead. While ROCm 7.0 PyTorch wheels are in pre-release, this is likely desirable.
-      - There will likely be warnings from pip telling you about dependencies that don't match. Most of these (except numpy) can *usually* be ignored.
-      - To install a specific build, you can visit the sub-directories in the index URL (e.g. [https://d2awnip2yjpvqn.cloudfront.net/v2/gfx120X-all/torch](https://d2awnip2yjpvqn.cloudfront.net/v2/gfx120X-all/torch) ), copy the link of the package you desire and install it using
-         - `python -m pip install url-that-you-copy-pasted-here`
-         - Please note that the rocm-libraries and rocm-devel packages likely need to match the build date of the torch and torchvision packages
-         - Make sure that you pick the correct architecture ("win" in the filename) and the correct python version (cp311 = Python 3.11, cp312 = Python 3.12...)
-  6. Downgrade numpy to a working version by running the following in the venv shell
+  5. Visit the index URL for your GPU architecture that is listed [on this site](https://github.com/ROCm/TheRock/blob/main/RELEASES.md)
+  6. Check the rocm, rocm-sdk-core, rocm-sdk-devel, rocm-sdk-libraries-your-gfx-arch, torch and torchvision folders to find the latest **matching** builds for Windows ("win" in the name) and your version of Python (cp311 = Python 3.11, cp312 = Python 3.12 and so on)
+      - Matching means that you need to find packages that have the same build date, otherwise pip will refuse installing them
+  7. In your shell, type `python -m pip install ` and then paste each of the links to the packages, separated by spaces and hit enter
+    - For example, this could look like this ***(do not use this example!)***:
+       - `python -m pip install https://d2awnip2yjpvqn.cloudfront.net/v2/gfx120X-all/rocm-7.0.0rc20250825.tar.gz https://d2awnip2yjpvqn.cloudfront.net/v2/gfx120X-all/rocm_sdk_core-7.0.0rc20250825-py3-none-win_amd64.whl https://d2awnip2yjpvqn.cloudfront.net/v2/gfx120X-all/rocm_sdk_devel-7.0.0rc20250825-py3-none-win_amd64.whl https://d2awnip2yjpvqn.cloudfront.net/v2/gfx120X-all/rocm_sdk_libraries_gfx120x_all-7.0.0rc20250825-py3-none-win_amd64.whl https://d2awnip2yjpvqn.cloudfront.net/v2/gfx120X-all/torch-2.9.0a0%2Brocm7.0.0rc20250825-cp312-cp312-win_amd64.whl https://d2awnip2yjpvqn.cloudfront.net/v2/gfx120X-all/torchvision-0.24.0a0%2Brocm7.0.0rc20250825-cp312-cp312-win_amd64.whl`
+       - The reason why I recommend this type of approach is that pip would otherwise download tons of versions in an attempt to find one that is compatible with all other installed packages; *but it likely won't find one at this time.* This approach saves you time and network traffic.
+  8. pip should now download, compile and install these packages
+  9. Downgrade numpy to a working version by running the following in the venv shell
       - `python -m pip uninstall numpy` followed by
       - `python -m pip install numpy==1.26.4`
-  7. Deactivate the venv by running `deactivate` in the shell
-  8. Run SD.Next like this:
+  10. Deactivate the venv by running `deactivate` in the shell
+  11. Run SD.Next like this:
       - `webui.bat --debug --use-rocm --skip-torch --experimental`
       - `--debug` will enable debug output which helps with diagnosing issues
       - `--use-rocm` probably has no effect at this time but it's nice to have 😉
       - `--skip-torch` will skip checks for torch packages so that they don't get replaced by the regular versions
       - `--experimental` will skip checks for various packages and libraries, allowing you to attempt running SD.Next even if something is deemed incompatible (i.e. prevents numpy from being replaced with a newer version)
       - Keep in mind that your installation of SD.Next might break during this process. If it does, the easiest "fix" is to start over. 😅
-  10. It should work? 🤔
+  12. It should work? 🤔
