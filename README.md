@@ -39,7 +39,8 @@ This is assuming you have fulfilled the requirements already; meaning you have a
       - `.\venv\Scripts\Activate.ps1` (for Powershell, might require script execution privileges)
       - If the shell says (venv) next to your cursor, then it worked correctly
   5. Run the following to install the ROCm libraries as well as torch and torchvision in the venv (this might take a while as the download is large and the ROCm libs will be compiled on your system)
-      - `python -m pip install --index-url https://d2awnip2yjpvqn.cloudfront.net/v2/gfx120X-all/ rocm[libraries,devel] torch torchvision`
+      - `python -m pip install --no-deps --index-url https://d2awnip2yjpvqn.cloudfront.net/v2/gfx120X-all/ rocm[libraries,devel] torch torchvision`
+      - With `--no-deps` pip will not try to look for compatible versions and install the latest packages instead. While ROCm 7.0 PyTorch wheels are in pre-release, this is likely desirable.
       - There will likely be warnings from pip telling you about dependencies that don't match. Most of these (except numpy) can *usually* be ignored.
       - To install a specific build, you can visit the sub-directories in the index URL (e.g. [https://d2awnip2yjpvqn.cloudfront.net/v2/gfx120X-all/torch](https://d2awnip2yjpvqn.cloudfront.net/v2/gfx120X-all/torch) ), copy the link of the package you desire and install it using
          - `python -m pip install url-that-you-copy-pasted-here`
